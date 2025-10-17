@@ -10,9 +10,11 @@ import { getAIResumeFeedback } from "../services/aiService.js";
 export const uploadResume = async (req, res) => {
     try{
         if(!req.file) return res.status(400).json({ msg: "No file uploaded" });
+        
 
         // save file into DB
         const resume = await Resume.create({
+            userId : req.user.id,
             fileName : req.file.filename,
             filePath : req.file.path,
             uploadAt : new Date(),
@@ -33,6 +35,12 @@ export const analyzeResume = async (req, res) => {
         const resume = await Resume.findById(req.params.id);
         if(!resume) return res.status(404).json({ msg: "Resume not found" });
 
+        
+    // authorize: only owner can analyze
+    if (resume.userId.toString() !== req.user.id) {
+      return res.status(403).json({ msg: "Not authorized to analyze this resume" });
+    }
+
         const dataBuffer = fs.readFileSync(resume.filePath);
         const parser = new PDFParse({ data: dataBuffer });
         const textResult = await parser.getText();
@@ -45,6 +53,7 @@ export const analyzeResume = async (req, res) => {
     }
 
     const newFeedback = await Feedback.create({
+        userId: req.user.id,
       resumeId: resume._id,
       strengths: feedback.strengths,
       improvements: feedback.improvements,

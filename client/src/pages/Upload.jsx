@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import API from "../api/api";
 import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Upload = () => {
   const [file, setFile] = useState(null);
@@ -40,6 +41,8 @@ const Upload = () => {
   };
 
   return (
+    <>
+     <Navbar />
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-yellow-300 px-4">
       <h1 className="text-4xl font-bold mb-8">🧠 AI Resume Feedback System</h1>
 
@@ -146,6 +149,7 @@ const Upload = () => {
         </Link>
       </div>
     </div>
+    </>
   );
 };
 

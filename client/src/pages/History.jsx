@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import API from "../api/api";
+import { useUser } from "../context/UserContext";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import Navbar from "../components/Navbar";
 
 ChartJS.register(
   CategoryScale,
@@ -22,20 +24,24 @@ ChartJS.register(
   Legend
 );
 
-const History = ({ userId }) => {
+const History = () => {
+  const { user } = useUser();
   const [feedbacks, setFeedbacks] = useState([]);
 
   useEffect(() => {
+    if(!user) return;
+
     const fetchHistory = async () => {
       try {
-        const res = await API.get(`/feedback/user/${userId}`);
+        const res = await API.get(`/feedback/user/${user.id}`);
         setFeedbacks(res.data);
+        console.log(feedbacks);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching feedback history:", err);
       }
     };
     fetchHistory();
-  }, [userId]);
+  }, [user]);
 
   // Prepare chart data
   const data = {
@@ -53,7 +59,9 @@ const History = ({ userId }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-yellow-300 px-6 py-10">
+      <>
+      <Navbar />
+      <div className="min-h-screen bg-black text-yellow-300 px-6 py-10">
       <h1 className="text-4xl font-bold mb-8">📊 Resume Feedback History</h1>
 
       {feedbacks.length === 0 ? (
@@ -102,6 +110,7 @@ const History = ({ userId }) => {
         </>
       )}
     </div>
+      </>
   );
 };
 

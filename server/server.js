@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import resumeRoutes from "./routes/resumeRoutes.js";
 import feedbackRoutes from "./routes/feedbackroutes.js"
+import authRoutes from "./routes/authRoutes.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
@@ -14,6 +16,7 @@ app.use(cors({
   credentials: true // if you're using cookies or HTTP authentication
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 //MongoDb Connect
 mongoose.connect(process.env.MONGO_URI)
@@ -29,6 +32,7 @@ app.get("/api", (req, res) => {
     res.send("AI Resume Feedback Backend Running /api route");
 })
 
+app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/feedback", feedbackRoutes);
 
