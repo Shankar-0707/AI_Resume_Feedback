@@ -26,11 +26,11 @@ const Login = () => {
       // save token in localStorage or cookies
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
+      localStorage.setItem("userId", res.data.user.id);
       // ✅ Set logged-in user in context
       setUser(user);
 
-      navigate("/home"); // redirect after login
+      navigate("/"); // redirect after login
     } catch (err) {
       console.error(err);
      alert(err.response?.data?.msg || "Login failed");

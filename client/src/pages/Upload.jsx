@@ -140,14 +140,7 @@ const Upload = () => {
         </div>
       )}
 
-      <div className="mt-6 text-center">
-        <Link
-          to="/history"
-          className="text-yellow-400 hover:text-yellow-300 font-bold underline"
-        >
-          📜 View Feedback History
-        </Link>
-      </div>
+      
     </div>
     </>
   );

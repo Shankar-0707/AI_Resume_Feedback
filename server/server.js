@@ -6,6 +6,8 @@ import resumeRoutes from "./routes/resumeRoutes.js";
 import feedbackRoutes from "./routes/feedbackroutes.js"
 import authRoutes from "./routes/authRoutes.js";
 import cookieParser from "cookie-parser";
+import ResumeCreation from "./models/ResumeCreation.js";
+import resumeCreationRoutes from "./routes/resumeCreationRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -35,6 +37,7 @@ app.get("/api", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/resumecreate", resumeCreationRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=> console.log("Server running on Port : ", PORT));

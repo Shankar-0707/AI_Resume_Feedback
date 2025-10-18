@@ -61,7 +61,7 @@ const History = () => {
   return (
       <>
       <Navbar />
-      <div className="min-h-screen bg-black text-yellow-300 px-6 py-10">
+      <div className="mt-16 min-h-screen bg-black text-yellow-300 px-6 py-10">
       <h1 className="text-4xl font-bold mb-8">📊 Resume Feedback History</h1>
 
       {feedbacks.length === 0 ? (
