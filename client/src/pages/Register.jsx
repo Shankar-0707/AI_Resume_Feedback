@@ -14,7 +14,7 @@ const Register = () => {
   useEffect(() => {
   const token = localStorage.getItem("token");
   if (token) {
-    navigate("/upload");
+    navigate("/");
   }
 }, []);
 
@@ -26,10 +26,12 @@ const Register = () => {
       // Save token + user info
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("userId", res.data.user.id);
+
 
       setUser(user); // ✅ update UserContext
 
-      navigate("/home"); // redirect to upload page
+      navigate("/"); // redirect to upload page
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.msg || "Registration failed");

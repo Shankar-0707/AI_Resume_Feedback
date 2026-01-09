@@ -19,9 +19,12 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await API.post("/auth/login", { email, password });
+      const res = await API.post("/auth/login", { email, password },{
+        method : 'POST',
+        withCredentials : true
+      });
       // Backend returns user info + token
-      const { user, token } = res.data;
+      const { user, token } = res.data; 
 
       // save token in localStorage or cookies
       localStorage.setItem("token", token);

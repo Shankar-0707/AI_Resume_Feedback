@@ -1,28 +1,97 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Viewresume = () => {
   const [resumes, setResumes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchResumes = async () => {
       const userId = localStorage.getItem("userId");
-      const res = await axios.get(
-        `http://localhost:5000/api/resumecreate/${userId}`
-      );
-      setResumes(res.data);
+      if (!userId || userId === "undefined" || userId === "null") {
+        setIsLoading(false);
+        setResumes([]); // Ensure state is cleared
+        // Optionally, redirect to login if not logged in
+        // navigate('/login');
+        return;
+      }
+      4;
+
+      setIsLoading(true);
+
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/resumecreate/${userId}`
+        );
+        setResumes(res.data);
+      } catch (error) {
+        // Handle 404/error, usually means no resume found
+        setResumes([]);
+      } finally {
+        setIsLoading(false); // ✅ Turn off loading when done
+      }
     };
     fetchResumes();
   }, []);
 
-  if (!resumes || resumes.length === 0)
+  if (isLoading) {
     return (
       <>
-         <Navbar /> {/* Navbar is important for consistent layout */}
-       {" "}
-        <div className="p-6 mx-auto bg-gray-900 text-white  shadow-lg min-h-screen flex flex-col items-center justify-center">
-         {" "}
+        <Navbar />
+        <div className="p-6 mx-auto bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center">
+          {/* Simple Loading Spinner UI */}
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+          <p className="mt-4 text-lg text-yellow-500">
+            Loading your resumes...
+          </p>
+        </div>
+      </>
+    );
+  }
+
+  //   if (resumes.length === 0)
+  //     return (
+  //       <>
+  //          <Navbar /> {/* Navbar is important for consistent layout */}
+  //        {" "}
+  //         <div className="p-6 mx-auto bg-gray-900 text-white  shadow-lg min-h-screen flex flex-col items-center justify-center">
+  //          {" "}
+  //           <svg
+  //             xmlns="http://www.w3.org/2000/svg"
+  //             className="h-20 w-20 mb-4 text-yellow-500"
+  //             fill="none"
+  //             viewBox="0 0 24 24"
+  //             stroke="currentColor"
+  //             strokeWidth={2}
+  //           >
+  //             <path
+  //               strokeLinecap="round"
+  //               strokeLinejoin="round"
+  //               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+  //             />
+  //           </svg>
+  //           {" "}
+  //           <p className="text-xl font-semibold text-gray-400">
+  //              No resume Found {" "}
+  //           </p>
+  //           {" "}
+  //           <p className="text-md text-gray-500 mt-2">
+  //             Please Create Your resume First{" "}
+  //           </p>
+  //          {" "}
+  //         </div>
+  //         {" "}
+  //       </>
+  //     );
+
+  if (resumes.length === 0)
+    return (
+      <>
+        <Navbar />
+        <div className="p-6 mx-auto bg-gray-900 text-white shadow-lg min-h-screen flex flex-col items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-20 w-20 mb-4 text-yellow-500"
@@ -37,17 +106,13 @@ const Viewresume = () => {
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          {" "}
           <p className="text-xl font-semibold text-gray-400">
-             No resume Found {" "}
+            No resume Found 😔
           </p>
-          {" "}
           <p className="text-md text-gray-500 mt-2">
-            Please Create Your resume First{" "}
+            Please Create Your resume First.
           </p>
-         {" "}
         </div>
-        {" "}
       </>
     );
 
